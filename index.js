@@ -12,18 +12,25 @@
    
   var each = function(){
     var index = 0, 
-    args = toArray(arguments),
-    f = args.shift(), //assumes fn as 1st arg
-    t = this; //defaults target to 'this'
-    if (typeof f !== 'function'){
-      var t = f;
-      f = args.shift();
-      if( typeof f !== 'function' ) throw new Error('each() requires a method');
-    }  
-    for(var i in t){
-      t[ i ] = f( t[ i ], i, index++, args ) || t[ i ]; 
+            a = toArray(arguments),
+            l = a.length,
+            f,
+            o;
+    //check for classic signature    
+    if( l > 1 ){
+      o = a.shift();
+      f = a.shift();
+    //go native if not
+    } else {
+      o = this;
+      f = a.shift();
     }
-    return t;     
+    //check for fn
+    if (typeof f !== 'function') throw new Error('each() requires a method');
+    for(var i in o){
+      o[ i ] = f( o[ i ], i, index++, a ) || o[ i ]; 
+    }
+    return o;     
   };
   
   module.exports = each;

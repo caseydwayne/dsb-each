@@ -1,36 +1,50 @@
-(function(){
+module.exports = (function(){
   
   /*
    * template test
    */
   
-  var source = require('./index'),
-       debug = require('dsb-debug-lite');
-  
-  debug( 'name', source, 'arguments', 'expected' );
-  
-  
+  var each = require('./index'),
+     debug = require('dsb-debugger').create('each'),
+      type = require('dsb-typecheck');
+    
+  var obj = { 'my': 'wo', 'test': 'rks' },
+      exp = 'works',
+      arr = exp.split();
+       
+
  
   /*
    * each
    */
   
-  method( 'each', function( fn, test, name ){
-    var s = '',
-        f = function(v,k,i){
-          s += v;          
-        },
-        o = { 'my': 'wo', 'test': 'rks' },
-        a = 'works',
-        arr = a.split(),
-        as = '',
-        af = function(v,k,i){
-          as += v;          
-        };
-    fn(o,f);
-    fn(arr,af);
-    test( 'object iterated', s===a, true);
-    test( 'array iterated', as===a, true);
-  });    
+  debug.method( 'each', function( fn, test, name ){
+ 
+    
+    var t = function(x,c){
+      var s = '',
+          f = function(v,k,i){
+            s += v;          
+          },
+          t = type(x),
+          n = t+' iterated'+(c?'*call':'');
+      c ? fn.call( x, f ) : fn( x, f );          
+      test( n, s===exp, true);
+    };
+    
+    //test classic
+    t(obj);
+    t(arr);
+    
+    //test native
+    t(obj,true);
+    t(arr,true);
+    
+    
+  }, each );    
+  
+  debug.complete();
+  
+  return debug;
         
 }());
