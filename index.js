@@ -48,8 +48,7 @@ module.exports = (function(DEBUG){
     
     for(var n in o){
       //force true number if numerical key
-      if( parseInt(n) === i ) n = i;      
-      if( DEBUG ) console.log( n, i );
+      if( parseInt(n) === i ) n = i;            
       //result from fn
       var r = f( o[n], n, i );
       //value (result || original)

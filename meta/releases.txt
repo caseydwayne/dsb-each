@@ -1,0 +1,36 @@
+dsb-each is "the essential iterator"
+
+  signature:
+	  each( [target=this], method, [map=false] )
+	
+  description:	
+    works on objects and arrays ({target}).
+
+    iterates on the target, passing target data thru the supplied method with the parameters ( value, key, index ). 
+
+	notes:
+   
+	  if a value is returned by the method, it will replace the value in the output object.
+  
+    if a final boolean of {map} is true, the supplied {target} will receive these values directly.
+    otherwise, a same-type object will be created and returned.
+					
+1.0.0
+
+  dsb-each transitioned over from pre-node build
+	+ added non-native support with optional {target} as 1st param
+
+	
+1.1.0 
+
+  added "dump" object support and optional {map} boolean
+
+	
+1.1.1 
+
+  forced string'd {key} numbers to real numbers (seems I did that pre-1.0 but it disappeared...)
+
+	
+1.1.2 
+
+  performing array check and dumping into new array if Array{target} and !{map}
