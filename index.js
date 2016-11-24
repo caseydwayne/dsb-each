@@ -1,4 +1,4 @@
-module.exports = (function(){
+module.exports = (function(DEBUG){
 /*---------------------------------------------------------------------*/
   
   var toArray = require('dsb-to-array');   
@@ -17,11 +17,14 @@ module.exports = (function(){
 /*---------------------------------------------------------------------*/
    
   var each = function(){
+    
+    //setup
     var a = toArray(arguments),        
         i = 0,
         m = false,
         f,
         o;
+      
     //check for native signature
     if( typeof( a[0] ) === 'function' ){      
       o = this;
@@ -39,19 +42,22 @@ module.exports = (function(){
     if( a.length && ( a[0] === true ) ) m = true;
     
     //create object to dump iterated data into
-    if( !m ) var x = {}; 
+    if( !m ){
+      var x = ( o instanceof Array ) ? [] : {};
+    } 
     
     for(var n in o){
-      //increase the index
-      i++;
       //force true number if numerical key
-      if( parseInt(n) === i ) n = i;
+      if( parseInt(n) === i ) n = i;      
+      if( DEBUG ) console.log( n, i );
       //result from fn
-      var r = f( o[ n ], n, i );
+      var r = f( o[n], n, i );
       //value (result || original)
       var v = ( typeof r !== 'undefined' ) ? r : o[n];
       //map (overwrite) to original or add to dump object
-      m ? o[ n ] = v : x[n] = v;
+      m ? o[n] = v : x[n] = v;
+      //increase the index
+      i++;
     }
     
     return m ? o : x; //y     
@@ -63,4 +69,4 @@ module.exports = (function(){
   return each;
   
 /*---------------------------------------------------------------------*/
-}());
+}(0));
