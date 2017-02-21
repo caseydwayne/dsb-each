@@ -3,14 +3,13 @@
   "version": "1.1.2",
   "description": "the essential iterator",
   "main": "index.js",
-  "author": "Casey Dwayne <opensource@caseydwayne.com> (http://caseydwayne.com)",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/caseydwayne/dsb-each.git"
-  },
+  "author": "Casey Dwayne <opensource@caseydwayne.com> (http://caseydwayne.com)",  
   "dependencies": {
-    "dsb-to-array": "~1.0"
+    "dsb-to-array": "1.0.0"
   },
-  "license": "None",  
+  "devDependencies": {
+    "dsb-debug-mini": "latest"
+  },
+  "license": "None",
   "private": true
 }
