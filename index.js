@@ -1,8 +1,8 @@
 module.exports = (function(DEBUG){
 /*----------------------------------------------------------------------------*/
-  
+
   var toArray = require('dsb-to-array');
-    
+
 /*----------------------------------------------------------------------------*/
 
   var ns = 'each()';
@@ -11,14 +11,14 @@ module.exports = (function(DEBUG){
       WRONG_SIGNATURE = 'at least one method was iterated with '
         + ns + ', but something is off in the signature:'
         + ' reference the docs for signatures and uses.';
-        
-  
-/******************************************************************************/  
-  
-  /* 
+
+
+/******************************************************************************/
+
+  /*
    * @method each
    * works on objects || arrays.
-   * passes thru the function (1st arg) supplying (value, key, index). 
+   * passes thru the function (1st arg) supplying (value, key, index).
    * values becomes output of the function
    *   (or the original value, if nothing is returned from the method)
    * additional methods may be supplied for chaining
@@ -29,11 +29,11 @@ module.exports = (function(DEBUG){
    * @param [map] {boolean} if true, maps directly to the object being iterated
    * @return result {same as target} object with modified values
    */
-  
+
 /*----------------------------------------------------------------------------*/
-   
+
   var each = function(){
-    
+
     //setup
     var vo = false, //feed value only?
         mp = 0,     //# methods provided
@@ -45,41 +45,41 @@ module.exports = (function(DEBUG){
          f, o, x;
 
     if( !l ) throw new Error(NO_ARGS);
-    
-    if( DEBUG > 3 ) console.log( 'each received', arguments ); 
-    
+
+    if( DEBUG > 3 ) console.log( 'each received', arguments );
+
     //check for map (modify directly)
     if( typeof( a[l-1] ) === 'boolean' ) m = a.pop();
-    
+
     //check for valueOnly
     if( typeof a[0] === 'boolean' )  vo = a.shift();
 
     if( ( m || vo ) && DEBUG ) console.log(
-      'resolved booleans', { valueOnly:vo, map:m } 
+      'resolved booleans', { valueOnly:vo, map:m }
     );
-  
+
     //check for native signature
-    if( typeof( a[0] ) === 'function' ){      
-      n = true;      
+    if( typeof( a[0] ) === 'function' ){
+      n = true;
       o = this;
       f = a.shift();
     //attempt for classic signature
-    } else {      
+    } else {
       o = a.shift();
-      f = a.shift();      
+      f = a.shift();
     }
-    
+
     if( n && DEBUG ) console.log( 'native signature?', n );
-    
+
     //create object to dump iterated data into
     if( !m ) x = ( o instanceof Array ) ? [] : {};
 
 /******************************************************************************/
 
-    var feed = function( fn, v, n ){ 
-      
+    var feed = function( fn, v, n ){
+
       var r;
-      
+
       //handle value only
       if( vo ){
         //look ahead for args array
@@ -87,9 +87,9 @@ module.exports = (function(DEBUG){
           var args = a.shift(),
               //check for context
               cset = (typeof a[0] === 'object'),
-              self = cset ? a.shift() : null;            
+              self = cset ? a.shift() : null;
           if( DEBUG > 2 ) console.log(
-            'found arguments' 
+            'found arguments'
               + ( (self!==null)
                 ? ' and context'
                   : ', applying with null context' )
@@ -97,8 +97,8 @@ module.exports = (function(DEBUG){
           //apply with value, arg1, ..argN
           r = fn.apply( self, [ v ].concat( args ) );
         //or feed value only
-        } else r = fn( v );   
-      }        
+        } else r = fn( v );
+      }
       else {
         if( DEBUG > 2 ) console.log('feeding classic signature');
         //force true number if numerical key
@@ -106,17 +106,17 @@ module.exports = (function(DEBUG){
         //feed classic signature
         r = fn( v, n, i );
       }
-      
+
       return r;
 
     };
-    
+
 /******************************************************************************/
-    
+
     var it = function(fn){
-      
+
       var nam = (typeof fn !== 'function');
-      
+
       if( mp ){
         if( nam ) throw new Error(WRONG_SIGNATURE);
         //reset index if multiple methods provided
@@ -124,44 +124,44 @@ module.exports = (function(DEBUG){
       } else {
         if( nam ) throw new Error(NO_METHOD);
       }
-      
+
       if( DEBUG > 2 ) console.log( 'iterating with', fn );
-      
+
       //declare target object
       var to = x || o;
-      
+
       //declare iteration object (original 1st time around)
       var io = !mp ? o : to;
-      
+
       //iterate the target object
       for(var n in io){
-        
+
         var v = io[n],
             r = feed( fn, v, n );
-        
+
         //replace value if something returned
          if( typeof r !== 'undefined' ) v = r;
-        
+
         if( DEBUG ) {
           console.log( 'each adding', n+':', v );
         }
-        
+
         //re-assign value to key
         to[n] = v;
-              
+
         //increase the index
         i++;
-      
+
       }//end for loop
-      
+
       //up the method count
       mp++;
-      
+
       l = a.length;
-      
+
       //make recursive with optional feed change
       if( l ){
-        if( DEBUG ) console.log( 'found', l, 'more arguments', a );        
+        if( DEBUG ) console.log( 'found', l, 'more arguments', a );
         if( l > 1 && (typeof a[0] === 'boolean') ){
           if( DEBUG ) console.log('found VO change');
           vo = a.shift();
@@ -173,17 +173,17 @@ module.exports = (function(DEBUG){
         }
         else throw new Error(WRONG_SIGNATURE);
       }
-      
+
       return to;
-      
+
     };
 
 /******************************************************************************/
 
     var r = it( f );
-    
-    if( DEBUG > 2 ) console.log( 'returning', r );        
-      
+
+    if( DEBUG > 2 ) console.log( 'returning', r );
+
     return r;
 
 /*----------------------------------------------------------------------------*/
@@ -193,6 +193,6 @@ module.exports = (function(DEBUG){
 /******************************************************************************/
 
   return each;
-  
+
 /*----------------------------------------------------------------------------*/
 }(0));

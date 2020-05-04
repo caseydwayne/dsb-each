@@ -1,15 +1,16 @@
 {
   "name": "dsb-each",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "the essential iterator",
   "main": "index.js",
-  "author": "Casey Dwayne <opensource@caseydwayne.com> (http://caseydwayne.com)",  
+  "author": "Casey Dwayne <opensource@caseydwayne.com> (https://caseydwayne.com)",
   "dependencies": {
     "dsb-to-array": "1.0.0"
   },
   "devDependencies": {
-    "dsb-debug-mini": "latest"
+    "dsb-debug-mini": "^1.0.0",
+    "dsb-typecheck": "^1.3.0"
   },
-  "license": "None",
+  "license": "NONE",
   "private": true
 }
